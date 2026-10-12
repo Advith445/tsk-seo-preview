@@ -2,10 +2,10 @@
 (() => {
   'use strict';
   const ID = 'G-HLX4G8BV7E';
-  // RELEASE GATE: keep false until remote enhanced measurement is disabled
-  // and advertising settings are verified. See RELEASE-NOTES.md.
-  const RELEASE_ENABLED = false;
-  const KEY = 'tsk.analyticsConsent.v1';
+  // PREVIEW TEST ONLY: consent-gated collection to existing GA property.
+  // Never copy this enabled gate into production; inspect requests manually.
+  const RELEASE_ENABLED = true;
+  const KEY = 'tsk.previewAnalyticsConsent.v1';
   let choice = null;
   let started = false;
   let previousFocus = null;
@@ -17,7 +17,9 @@
   const open = () => {
     previousFocus = document.activeElement;
     panel.hidden = false;
-    status.textContent = choice === 'accepted' ? 'Optional analytics is on.' : 'Optional analytics is off.';
+    status.textContent = choice === 'accepted'
+      ? (RELEASE_ENABLED ? 'Optional analytics is on.' : 'Consent accepted. Optional analytics is disabled for this release.')
+      : 'Optional analytics is off.';
     document.getElementById('analytics-reject').focus();
   };
   const close = () => { panel.hidden = true; if (previousFocus) previousFocus.focus(); };
@@ -45,9 +47,9 @@
     window.gtag('js', new Date());
     // Only these public paths/titles can be sent. Never read query, hash,
     // referrer, page title, form fields, or WhatsApp link destinations.
-    const privacy = location.pathname === '/privacy.html';
-    const safeLocation = 'https://tskthespicekitchenkokapet.in/' + (privacy ? 'privacy.html' : '');
-    const safeTitle = privacy ? 'TSK Privacy Policy' : 'TSK - The Spice Kitchen, Kokapet';
+    const privacy = location.pathname === '/tsk-seo-preview/privacy.html';
+    const safeLocation = 'https://advith445.github.io/tsk-seo-preview/' + (privacy ? 'privacy.html' : '');
+    const safeTitle = privacy ? 'SYNTHETIC PREVIEW - TSK Privacy Policy' : 'SYNTHETIC PREVIEW - TSK Website';
     window.gtag('config', ID, {
       send_page_view: false, allow_google_signals: false,
       allow_ad_personalization_signals: false, ignore_referrer: true,
